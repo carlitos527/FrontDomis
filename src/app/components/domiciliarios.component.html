@@ -1,0 +1,71 @@
+<div class="container mt-4">
+
+  <h2 class="text-center fw-bold mb-4 text-primary">Domiciliarios</h2>
+
+  <!-- Mensaje -->
+  <div *ngIf="mensaje()" class="alert alert-info text-center">
+    {{ mensaje() }}
+  </div>
+
+  <!-- Botón Agregar / Cancelar -->
+  <div class="text-end mb-3">
+    <button class="btn btn-outline-primary rounded-pill px-4"
+            (click)="editMode.set(!editMode())">
+      {{ editMode() ? 'Cancelar' : 'Agregar Domiciliario' }}
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="editMode()" class="card p-4 mb-4 shadow-sm">
+    <h5 class="text-primary mb-3">
+      {{ editId ? 'Editar Domiciliario' : 'Registrar Domiciliario' }}
+    </h5>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Nombre</label>
+          <input type="text" class="form-control" formControlName="nombre" placeholder="Ej. Juan Pérez"/>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Teléfono</label>
+          <input type="text" class="form-control" formControlName="telefono" placeholder="3001234567"/>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Vehículo</label>
+          <input type="text" class="form-control" formControlName="vehiculo" placeholder="Moto, Bicicleta..."/>
+        </div>
+      </div>
+      <div class="mt-3 text-end">
+        <button class="btn btn-success" type="submit">
+          {{ editId ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Spinner de carga -->
+  <div *ngIf="loading()" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- Lista de domiciliarios -->
+  <div class="row g-3">
+    <div *ngFor="let d of domiciliarios()" class="col-md-4">
+      <div class="card p-3 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ d.nombre }}</h5>
+          <p class="card-text mb-1"><strong>Teléfono:</strong> {{ d.telefono }}</p>
+          <p class="card-text mb-1"><strong>Vehículo:</strong> {{ d.vehiculo || 'N/A' }}</p>
+          <p class="card-text mb-1"><strong>Estado:</strong> {{ d.estado }}</p>
+
+          <div class="d-flex justify-content-between mt-3">
+            <button class="btn btn-outline-primary btn-sm" (click)="edit(d)">Editar</button>
+            <button class="btn btn-outline-danger btn-sm" (click)="delete(d)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

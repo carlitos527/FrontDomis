@@ -1,0 +1,127 @@
+<div class="container mt-4">
+  <h2 class="text-center fw-bold mb-4 text-primary">Productos</h2>
+
+  <!-- Botón de agregar / cancelar -->
+  <div class="text-end mb-3">
+    <button
+      class="btn btn-outline-primary rounded-pill shadow-sm px-4"
+      (click)="mostrarFormulario = !mostrarFormulario"
+    >
+      <i class="bi" [ngClass]="mostrarFormulario ? 'bi-x-circle' : 'bi-plus-circle'"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Agregar Producto' }}
+    </button>
+  </div>
+
+  <!-- Formulario colapsable -->
+  <div *ngIf="mostrarFormulario" class="card border-0 shadow-lg p-4 mb-4">
+    <h5 class="text-primary mb-3">
+      {{ editandoProductoId ? 'Editar Producto' : 'Registrar Nuevo Producto' }}
+    </h5>
+    <form (ngSubmit)="guardarProducto()" #productoForm="ngForm">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Nombre</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            [(ngModel)]="nuevoProducto.nombre"
+            name="nombre"
+            required
+            placeholder="Ej. Camisa"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Descripción</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            [(ngModel)]="nuevoProducto.descripcion"
+            name="descripcion"
+            placeholder="Opcional"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Precio</label>
+          <input
+            type="number"
+            class="form-control form-control-lg"
+            [(ngModel)]="nuevoProducto.precio"
+            name="precio"
+            required
+            min="0"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Stock</label>
+          <input
+            type="number"
+            class="form-control form-control-lg"
+            [(ngModel)]="nuevoProducto.stock"
+            name="stock"
+            required
+            min="0"
+          />
+        </div>
+      </div>
+      <div class="text-end mt-4">
+        <button
+          class="btn btn-success px-4 rounded-pill shadow-sm"
+          type="submit"
+          [disabled]="productoForm.invalid"
+        >
+          <i class="bi bi-check-circle me-1"></i>
+          {{ editandoProductoId ? 'Actualizar' : 'Guardar Producto' }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary px-4 ms-2 rounded-pill shadow-sm"
+          (click)="resetFormulario()"
+        >
+          <i class="bi bi-x-circle me-1"></i> Limpiar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="row g-4">
+    <div *ngFor="let producto of productos" class="col-12 col-md-6 col-lg-4">
+      <div class="card border-0 shadow-sm h-100 hover-card">
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-bold">{{ producto.nombre }}</h5>
+          <p class="card-text mb-1">{{ producto.descripcion || 'Sin descripción' }}</p>
+          <p class="text-muted small mb-3">
+            <strong>Precio:</strong> ${{ producto.precio }} <br />
+            <strong>Stock:</strong> {{ producto.stock }}
+          </p>
+          <div class="text-end">
+            <button
+              class="btn btn-outline-warning btn-sm rounded-pill me-2"
+              (click)="editarProducto(producto)"
+            >
+              <i class="bi bi-pencil"></i> Editar
+            </button>
+            <button
+              class="btn btn-outline-danger btn-sm rounded-pill"
+              (click)="eliminarProducto(producto.productoID)"
+            >
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin productos -->
+  <div *ngIf="!loading && productos.length === 0" class="alert alert-warning text-center mt-4">
+    <i class="bi bi-exclamation-circle"></i> No hay productos registrados.
+  </div>
+</div>

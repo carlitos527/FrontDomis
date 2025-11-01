@@ -1,0 +1,180 @@
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #365594;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Header con menú hamburguesa */
+    header {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #e0d5d5;
+      margin: 0;
+    }
+
+    .menu-toggle {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Placeholder panel */
+    .panel {
+      max-width: 480px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+
+    /* Grid de cards */
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+    }
+
+    /* Cards visuales */
+    .card {
+      border-radius: 20px;
+      padding: 10px;
+      color: rgb(233, 222, 222);
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(41, 38, 38, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .card i {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    /* Gradientes para cada card */
+    .card-clientes {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+    .card-domicilios {
+      background: linear-gradient(150deg, #f7971e, #928740);
+      color: #333;
+    }
+    .card-empresas {
+      background: linear-gradient(135deg, #56ab2f, #a8e063);
+      color: #333;
+    }
+    .card-pagos {
+      background: linear-gradient(135deg, #56ab2f, #a8e063);
+      color: #333;
+    }
+    .card-Pedidos {
+      background: linear-gradient(135deg, #beade0, #1a2452);
+    }
+    .card-Productos {
+      background: linear-gradient(135deg, #b1a612, #c5760e);
+    }
+    .card-zonas {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+    .card-empresa {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+    }
+    .card-usuarios {
+      background: linear-gradient(135deg, #f77062, #fe5196);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .card-text {
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    /* Menú lateral estilo offcanvas */
+    .offcanvas-body a {
+      display: block;
+      margin: 10px 0;
+      font-weight: 600;
+      text-decoration: none;
+      color: #3a2626;
+    }
+
+    .offcanvas-body a:hover {
+      color: #007bff;
+    }
+
+    .card-domicilios i {
+  font-size: 3rem;
+  color: white; /* si quieres que sea visible sobre fondo oscuro */
+  margin-bottom: 10px;
+}
+  </style>
+</head>
+
+<!-- Panel principal -->
+
+<div class="panel">
+  <div class="card-container">
+    <div class="card card-clientes" (click)="goToclientes()">
+      <i class="bi bi-geo-alt-fill"></i>
+      <div class="card-title">Clientes</div>
+      <div class="card-text  text-white">Lista y detalles</div>
+    </div>
+
+    <div class="card card-domicilios shadow-sm  text-center cursor-pointer p-3" (click)="goTodomicilio()">   
+      <div class="d-flex justify-content-center align-items-center mb-3"></div>  
+      <i class="fa-solid fa-motorcycle fa-3x"></i>
+      <div class="card-title">Domiciliario</div>
+      <div class="card-text text-white">Seguimiento de pedidos</div>
+    </div>
+
+  
+    <div class="card card-pagos" (click)="goTopagos()">
+      <i class="fas fa-credit-card"></i>
+      <div class="card-title">Pagos</div>
+      <div class="card-text">Registrar y revisar</div>
+    </div>
+
+    <div class="card card-Pedidos" (click)="goTopedidos()">
+      <i class="fas fa-shopping-cart"></i>
+      <div class="card-title">Pedidos</div>
+      <div class="card-text">Registrar pedidos</div>
+    </div>
+
+    <div class="card card-Productos" (click)="goToProductos()">
+      <i class="fas fa-box-open"></i>
+      <div class="card-title">Productos</div>
+      <div class="card-text">Registrar Productos</div>
+    </div>
+
+    <div class="card card-zonas" (click)="goToZonas()">
+      <i class="fas fa-map-marked-alt"></i>
+      <div class="card-title">Zonas</div>
+      <div class="card-text">Áreas de reparto</div>
+    </div>
+
+    <div class="card card-usuarios" (click)="goTousuarios()">
+      <i class="fas fa-user"></i>
+      <div class="card-title">Usuarios</div>
+      <div class="card-text">Gestión de usuarios</div>
+    </div>
+  </div>
+</div>

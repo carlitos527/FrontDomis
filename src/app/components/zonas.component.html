@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <h2 class="text-center fw-bold mb-4 text-primary">Zonas de Reparto</h2>
+
+  <!-- Botón de agregar -->
+  <div class="text-end mb-3">
+    <button
+      class="btn btn-outline-primary rounded-pill shadow-sm px-4"
+      (click)="mostrarFormulario = !mostrarFormulario"
+    >
+      <i class="bi" [ngClass]="mostrarFormulario ? 'bi-x-circle' : 'bi-plus-circle'"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Agregar Zona' }}
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  @if (mostrarFormulario)
+  {
+    <div class="card border-0 shadow-lg p-4 mb-4">
+      <h5 class="text-primary mb-3">Registrar Nueva Zona</h5>
+      <form (ngSubmit)="crearZona()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Nombre</label>
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              [(ngModel)]="nuevaZona.nombre"
+              name="nombre"
+              required
+              placeholder="Ej. Zona Norte"
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Tarifa de envío</label>
+            <input
+              type="number"
+              class="form-control form-control-lg"
+              [(ngModel)]="nuevaZona.tarifaEnvio"
+              name="tarifaEnvio"
+              required
+              placeholder="Ej. 5000"
+            />
+          </div>
+        </div>
+        <div class="text-end mt-4">
+          <button class="btn btn-success px-4 rounded-pill shadow-sm" type="submit">
+            <i class="bi bi-check-circle me-1"></i> Guardar Zona
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Cargando -->
+  @if (loading)
+  {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Lista de zonas -->
+  <div class="row g-4">
+    <div *ngFor="let z of zonas" class="col-12 col-md-6 col-lg-4">
+      <div class="card border-0 shadow-sm h-100 hover-card">
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-bold">{{ z.nombre }}</h5>
+          <p class="card-text mb-1">
+            <i class="bi bi-currency-dollar"></i> Tarifa:
+            <strong>${{ z.tarifaEnvio }}</strong>
+          </p>
+          <p class="text-muted small mb-3">
+            <i class="bi bi-person-circle"></i> {{ z.createdBy }} <br />
+            <i class="bi bi-clock"></i> {{ z.createdAt | date: 'short' }}
+          </p>
+          <button
+            class="btn btn-outline-danger btn-sm rounded-pill"
+            (click)="eliminarZona(z.zonaID)"
+          >
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin zonas -->
+  @if (!loading && zonas.length === 0)
+  {
+    <div class="alert alert-warning text-center mt-4">
+      <i class="bi bi-exclamation-circle"></i> No hay zonas registradas.
+    </div>
+  }
+</div>

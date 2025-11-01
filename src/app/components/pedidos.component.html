@@ -1,0 +1,91 @@
+<div class="container mt-4">
+  <h2 class="text-center fw-bold mb-4 text-primary">Pedidos</h2>
+
+  <!-- Botón agregar -->
+  <div class="text-end mb-3">
+    <button class="btn btn-outline-primary rounded-pill shadow-sm px-4" (click)="mostrarFormulario = !mostrarFormulario">
+      <i class="bi" [ngClass]="mostrarFormulario ? 'bi-x-circle' : 'bi-plus-circle'"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Agregar Pedido' }}
+    </button>
+  </div>
+
+  <!-- Formulario de nuevo pedido -->
+  <div *ngIf="mostrarFormulario" class="card border-0 shadow-lg p-4 mb-4">
+    <h5 class="text-primary mb-3">Registrar Nuevo Pedido</h5>
+    <form (ngSubmit)="guardarPedido()">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Cliente ID</label>
+          <input type="number" class="form-control form-control-lg" [(ngModel)]="nuevoPedido.clienteID" name="clienteID" required />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Zona ID</label>
+          <input type="number" class="form-control form-control-lg" [(ngModel)]="nuevoPedido.zonaID" name="zonaID" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Notas</label>
+          <input type="text" class="form-control form-control-lg" [(ngModel)]="nuevoPedido.notas" name="notas" />
+        </div>
+      </div>
+
+      <!-- Detalles -->
+      <div class="mt-3">
+        <h6>Detalles del Pedido</h6>
+        <button type="button" class="btn btn-sm btn-outline-secondary mb-2" (click)="agregarDetalle()">Agregar Producto</button>
+        <div *ngFor="let d of nuevoPedido.detalles; let i = index" class="row g-2 align-items-center mb-2">
+          <div class="col">
+            <input type="number" class="form-control" placeholder="Producto ID" [(ngModel)]="d.productoID" name="productoID{{i}}" required />
+          </div>
+          <div class="col">
+            <input type="number" class="form-control" placeholder="Cantidad" [(ngModel)]="d.cantidad" name="cantidad{{i}}" min="1" required />
+          </div>
+          <div class="col">
+            <input type="number" class="form-control" placeholder="Precio Unitario" [(ngModel)]="d.precioUnitario" name="precio{{i}}" min="0" required />
+          </div>
+          <div class="col-auto">
+            <button type="button" class="btn btn-danger btn-sm" (click)="eliminarDetalle(i)">X</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-end mt-4">
+        <button class="btn btn-success px-4 rounded-pill shadow-sm" type="submit">
+          <i class="bi bi-check-circle me-1"></i> Guardar Pedido
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Lista de pedidos -->
+  <div class="row g-4">
+    <div *ngFor="let p of pedidos" class="col-12 col-md-6 col-lg-4">
+      <div class="card border-0 shadow-sm h-100 hover-card">
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-bold">Cliente: {{ p.clienteID }}</h5>
+          <p class="card-text mb-1">Zona: {{ p.zonaID }} | Estado: {{ p.estado }}</p>
+          <p class="text-muted small mb-3">Notas: {{ p.notas }}</p>
+          <ul class="list-group list-group-flush">
+            <li *ngFor="let d of p.detalles" class="list-group-item">
+              Producto {{ d.productoID }} - Cantidad: {{ d.cantidad }} - ${{ d.precioUnitario }}
+            </li>
+          </ul>
+          <button class="btn btn-outline-danger btn-sm rounded-pill mt-3" (click)="eliminarPedido(p.clienteID)">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sin pedidos -->
+  <div *ngIf="!loading && pedidos.length === 0" class="alert alert-warning text-center mt-4">
+    <i class="bi bi-exclamation-circle"></i> No hay pedidos registrados.
+  </div>
+</div>

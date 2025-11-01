@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+.card-container .card {
+  
+  
+  flex: 1 1 auto;
+  transition: transform 0.2s;
+  background-color: #f8f9fa; /* gris claro */
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.card-domicilios {
+  min-width: 220px;
+  min-height: 160px;
+  padding: 20px;
+}
+
+
+.card-container .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.card-title {
+  margin-top: 10px;
+}
+
+.card-text {
+  color: #6c757d; /* texto gris */
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+

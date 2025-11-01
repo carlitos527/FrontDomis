@@ -1,0 +1,36 @@
+<div class="auth-container" *ngIf="!isLoggedIn()">
+  <h2 *ngIf="mode() === 'login'">Iniciar Sesión</h2>
+  <h2 *ngIf="mode() === 'register'">Registrar Usuario</h2>
+
+  <input [ngModel]="nombreUsuario()" (ngModelChange)="nombreUsuario.set($event)" placeholder="Usuario" />
+<input [ngModel]="password()" (ngModelChange)="password.set($event)" type="password" placeholder="Contraseña" />
+
+
+  <button *ngIf="mode() === 'login'" (click)="login()" [disabled]="loading()">
+    {{ loading() ? 'Ingresando...' : 'Ingresar' }}
+  </button>
+
+  <button *ngIf="mode() === 'register'" (click)="register()" [disabled]="loading()">
+    {{ loading() ? 'Registrando...' : 'Registrar' }}
+  </button>
+
+  <p class="text-danger" *ngIf="error()">{{ error() }}</p>
+  <p class="text-success" *ngIf="success()">{{ success() }}</p>
+
+  <p class="toggle-text">
+    <ng-container *ngIf="mode() === 'login'">
+      ¿No tienes cuenta?
+      <a (click)="toggleMode()">Regístrate</a>
+    </ng-container>
+    <ng-container *ngIf="mode() === 'register'">
+      ¿Ya tienes cuenta?
+      <a (click)="toggleMode()">Inicia sesión</a>
+    </ng-container>
+  </p>
+</div>
+
+<!-- ✅ Mensaje de transición -->
+<div *ngIf="isLoggedIn()">
+  <h3>{{ success() }}</h3>
+  <p>Redirigiendo al inicio...</p>
+</div>

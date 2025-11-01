@@ -1,0 +1,65 @@
+<div class="container mt-4">
+  <h2 class="text-center fw-bold mb-4 text-primary">Pagos</h2>
+
+  <!-- Botón agregar -->
+  <div class="text-end mb-3">
+    <button class="btn btn-outline-primary rounded-pill shadow-sm px-4" (click)="mostrarFormulario = !mostrarFormulario">
+      <i class="bi" [ngClass]="mostrarFormulario ? 'bi-x-circle' : 'bi-plus-circle'"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Agregar Pago' }}
+    </button>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="mostrarFormulario" class="card shadow-lg p-4 mb-4">
+    <h5 class="text-primary mb-3">Nuevo Pago</h5>
+    <form (ngSubmit)="guardarPago()">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Pedido ID</label>
+          <input type="number" class="form-control" [(ngModel)]="nuevoPago.pedidoID" name="pedidoID" required />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Método de Pago</label>
+          <input type="text" class="form-control" [(ngModel)]="nuevoPago.metodoPago" name="metodoPago" required />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Monto</label>
+          <input type="number" class="form-control" [(ngModel)]="nuevoPago.monto" name="monto" required min="0.01" />
+        </div>
+      </div>
+      <div class="text-end mt-3">
+        <button type="submit" class="btn btn-success px-4 rounded-pill shadow-sm">Guardar Pago</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Cargando -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Lista de pagos -->
+  <div class="row g-4">
+    <div *ngFor="let pago of pagos" class="col-12 col-md-6 col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="fw-bold">Pedido ID: {{ pago.pedidoID }}</h5>
+          <p class="mb-1">Método: {{ pago.metodoPago }}</p>
+          <p class="mb-1">Monto: ${{ pago.monto }}</p>
+          <p class="mb-1 text-muted">Estado: {{ pago.estado }}</p>
+          <div class="text-end mt-2">
+            <button class="btn btn-outline-danger btn-sm rounded-pill" (click)="eliminarPago(pago.pagoID!)">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && pagos.length === 0" class="alert alert-warning text-center mt-4">
+    <i class="bi bi-exclamation-circle"></i> No hay pagos registrados.
+  </div>
+</div>

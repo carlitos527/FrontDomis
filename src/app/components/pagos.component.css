@@ -1,0 +1,63 @@
+/* Tarjetas de pago */
+.card {
+  border-radius: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Botones redondeados */
+.btn-rounded {
+  border-radius: 50px;
+}
+
+/* Hover sobre botones */
+.btn-outline-primary:hover,
+.btn-outline-danger:hover,
+.btn-outline-success:hover {
+  color: #fff;
+  background-color: #0d6efd; /* azul bootstrap */
+  border-color: #0d6efd;
+}
+
+/* Formulario */
+form input.form-control {
+  border-radius: 0.5rem;
+}
+
+form button {
+  transition: all 0.2s;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de pagos */
+.card-body h5 {
+  font-size: 1.1rem;
+}
+
+.card-body p {
+  font-size: 0.95rem;
+}
+
+/* Alertas */
+.alert {
+  border-radius: 1rem;
+}
+
+/* Spinner centrado */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Textos pequeños y muted */
+.text-muted {
+  font-size: 0.85rem;
+}
