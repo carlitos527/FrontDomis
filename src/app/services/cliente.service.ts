@@ -20,6 +20,7 @@ export interface ClienteDTO {
   direccion?: string;
   ciudad?: string;
   zonaID?: number;
+   createdBy?: string; // <--- agregado
 }
 
 @Injectable({

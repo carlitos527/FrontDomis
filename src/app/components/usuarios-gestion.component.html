@@ -1,0 +1,92 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4 text-primary fw-bold">👥 Gestión de Usuarios</h2>
+
+  <!-- Sección: Usuario actual -->
+  <div *ngIf="usuarioActual; else cargando" class="card p-3 mb-4 shadow-sm border-0">
+    <h5 class="text-secondary mb-3">Información del usuario actual</h5>
+    <p><strong>👤 Nombre:</strong> {{ usuarioActual.nombreUsuario }}</p>
+    <p><strong>🧩 Rol:</strong> 
+      <span class="badge bg-info text-dark">{{ usuarioActual.rol }}</span>
+    </p>
+  </div>
+
+  <ng-template #cargando>
+    <div class="text-center text-muted">
+      <div class="spinner-border text-primary me-2" role="status"></div>
+      Cargando información...
+    </div>
+  </ng-template>
+
+  <hr class="my-4" />
+
+  <!-- Sección: Crear nuevo usuario -->
+  <div class="card p-4 shadow-sm border-0">
+    <h5 class="text-success mb-3">➕ Crear nuevo usuario</h5>
+
+    <form (ngSubmit)="registrarUsuario()" #formUsuario="ngForm" novalidate>
+      <!-- Nombre -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Nombre de usuario</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="nuevoUsuario.nombreUsuario" 
+          name="nombreUsuario" 
+          required
+          minlength="3"
+          placeholder="Ejemplo: juanperez" />
+        <div *ngIf="formUsuario.submitted && formUsuario.controls['nombreUsuario']?.invalid" class="text-danger small mt-1">
+          El nombre de usuario es obligatorio (mínimo 3 caracteres)
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Contraseña</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          [(ngModel)]="nuevoUsuario.password" 
+          name="password" 
+          required
+          minlength="4"
+          placeholder="Contraseña segura" />
+        <div *ngIf="formUsuario.submitted && formUsuario.controls['password']?.invalid" class="text-danger small mt-1">
+          La contraseña debe tener al menos 4 caracteres
+        </div>
+      </div>
+
+      <!-- Rol -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Rol del usuario</label>
+        <select 
+          class="form-select" 
+          [(ngModel)]="nuevoUsuario.rol" 
+          name="rol" 
+          required>
+          <option value="">Seleccionar rol</option>
+          <option value="Admin">Administrador</option>
+      <option value="Clientes">Cliente</option>
+      <option value="Domiciliario">Domiciliario</option>
+        </select>
+        <div *ngIf="formUsuario.submitted && formUsuario.controls['rol']?.invalid" class="text-danger small mt-1">
+          Debes seleccionar un rol
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <div class="d-grid">
+        <button 
+          type="submit" 
+          class="btn btn-primary fw-semibold" 
+          [disabled]="formUsuario.invalid">
+          🚀 Registrar Usuario
+        </button>
+      </div>
+    </form>
+
+    <!-- Mensajes -->
+    <div *ngIf="mensaje" class="alert alert-success mt-3 fade show">{{ mensaje }}</div>
+    <div *ngIf="error" class="alert alert-danger mt-3 fade show">{{ error }}</div>
+  </div>
+</div>

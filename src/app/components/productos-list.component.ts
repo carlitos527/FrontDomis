@@ -1,24 +1,31 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+
 import { ProductoService, Producto, ProductoDTO } from '../services/producto.service';
 
 @Component({
   selector: 'app-productos-list',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './productos-list.component.html'
 })
 export class ProductosListComponent implements OnInit {
   private productoService = inject(ProductoService);
+  clienteEditandoID: number | null = null;
+  modoEdicion = false;
 
   productos: Producto[] = [];
-  nuevoProducto: ProductoDTO = { nombre: '', descripcion: '', precio: 0, stock: 0 };
-  editandoProductoId: number | null = null;
+  nuevoProducto: ProductoDTO = {
+    nombre: '',
+    descripcion: '',
+    precio: 0,
+    stock: 0
+  };
 
-  mostrarFormulario: boolean = false; // Para el formulario colapsable
-  loading: boolean = false;           // Para el spinner de carga
+  editandoProductoId: number | null = null;
+  mostrarFormulario = false;
+  loading = false;
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -27,42 +34,70 @@ export class ProductosListComponent implements OnInit {
   cargarProductos(): void {
     this.loading = true;
     this.productoService.getProductos().subscribe({
-      next: (data) => {
+      next: data => {
         this.productos = data;
         this.loading = false;
       },
-      error: (err) => {
+      error: err => {
         console.error('Error al cargar productos', err);
         this.loading = false;
       }
     });
   }
 
+  
+
   guardarProducto(): void {
-    if (!this.nuevoProducto.nombre || this.nuevoProducto.precio < 0 || this.nuevoProducto.stock < 0) return;
+    if (!this.nuevoProducto.nombre) return;
+
+    this.loading = true;
 
     if (this.editandoProductoId === null) {
-      // Crear
-      this.productoService.crearProducto(this.nuevoProducto).subscribe({
-        next: (prod) => {
+      // CREAR
+      const productoCrear = {
+        ...this.nuevoProducto,
+        createdBy: 'Admin'
+      };
+
+      this.productoService.crearProducto(productoCrear).subscribe({
+        next: prod => {
           this.productos.push(prod);
           this.resetFormulario();
-          this.mostrarFormulario = false;
+          this.loading = false;
         },
-        error: (err) => console.error('Error al crear producto', err)
+        error: err => {
+          console.error('Error al crear producto', err);
+          this.loading = false;
+        }
       });
+
     } else {
-      // Actualizar
-      this.productoService.actualizarProducto(this.editandoProductoId, this.nuevoProducto).subscribe({
+      // ACTUALIZAR
+      const productoActualizar = {
+        ...this.nuevoProducto,
+        updatedBy: 'Admin'
+      };
+
+      this.productoService.actualizarProducto(this.editandoProductoId, productoActualizar).subscribe({
         next: () => {
-          const index = this.productos.findIndex(p => p.productoID === this.editandoProductoId);
+          const index = this.productos.findIndex(
+            p => p.productoID === this.editandoProductoId
+          );
+
           if (index !== -1) {
-            this.productos[index] = { ...this.productos[index], ...this.nuevoProducto };
+            this.productos[index] = {
+              ...this.productos[index],
+              ...productoActualizar
+            };
           }
+
           this.resetFormulario();
-          this.mostrarFormulario = false;
+          this.loading = false;
         },
-        error: (err) => console.error('Error al actualizar producto', err)
+        error: err => {
+          console.error('Error al actualizar producto', err);
+          this.loading = false;
+        }
       });
     }
   }
@@ -71,7 +106,7 @@ export class ProductosListComponent implements OnInit {
     this.editandoProductoId = producto.productoID;
     this.nuevoProducto = {
       nombre: producto.nombre,
-      descripcion: producto.descripcion || '',
+      descripcion: producto.descripcion ?? '',
       precio: producto.precio,
       stock: producto.stock
     };
@@ -80,16 +115,24 @@ export class ProductosListComponent implements OnInit {
   }
 
   eliminarProducto(id: number): void {
-    if (!confirm('¿Deseas eliminar este producto?')) return;
+    if (!confirm('¿Desea eliminar este producto?')) return;
 
     this.productoService.eliminarProducto(id).subscribe({
-      next: () => this.productos = this.productos.filter(p => p.productoID !== id),
-      error: (err) => console.error('Error al eliminar producto', err)
+      next: () => {
+        this.productos = this.productos.filter(p => p.productoID !== id);
+      },
+      error: err => console.error('Error al eliminar producto', err)
     });
   }
 
   resetFormulario(): void {
-    this.nuevoProducto = { nombre: '', descripcion: '', precio: 0, stock: 0 };
+    this.nuevoProducto = {
+      nombre: '',
+      descripcion: '',
+      precio: 0,
+      stock: 0
+    };
     this.editandoProductoId = null;
+    this.mostrarFormulario = false;
   }
 }

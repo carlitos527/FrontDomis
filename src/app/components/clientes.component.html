@@ -1,41 +1,51 @@
 <div class="container mt-4">
   <h2 class="text-center fw-bold mb-4 text-primary">Clientes</h2>
 
-  <!-- Botón de agregar -->
+  <!-- Botón agregar -->
   <div class="text-end mb-3">
-    <button class="btn btn-outline-primary rounded-pill shadow-sm px-4" (click)="toggleFormulario()">
-  <i class="bi" [ngClass]="mostrarFormulario() ? 'bi-x-circle' : 'bi-plus-circle'"></i>
-  {{ mostrarFormulario() ? 'Cancelar' : 'Agregar Cliente' }}
-</button>
-
+    <button
+      class="btn btn-outline-primary rounded-pill shadow-sm px-4"
+      (click)="toggleFormulario()">
+      <i class="bi" [ngClass]="mostrarFormulario ? 'bi-x-circle' : 'bi-plus-circle'"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Agregar Cliente' }}
+    </button>
   </div>
 
-  <!-- Formulario -->
-  <div *ngIf="mostrarFormulario()" class="card border-0 shadow-lg p-4 mb-4">
-    <h5 class="text-primary mb-3">Registrar Nuevo Cliente</h5>
+  <!-- FORMULARIO CREAR CLIENTE -->
+  <div *ngIf="mostrarFormulario" class="card border-0 shadow-lg p-4 mb-4">
+    <h5 class="text-primary mb-3">Nuevo Cliente</h5>
+
     <form (ngSubmit)="crearCliente()">
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label fw-semibold">Nombre</label>
-          <input type="text" class="form-control" [(ngModel)]="nuevaCliente().nombre" name="nombre" required />
+          <input type="text" class="form-control" [(ngModel)]="nuevaCliente.nombre" name="nombre" required />
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold">Teléfono</label>
-          <input type="text" class="form-control" [(ngModel)]="nuevaCliente().telefono" name="telefono" required />
+          <input type="text" class="form-control" [(ngModel)]="nuevaCliente.telefono" name="telefono" required />
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold">Email</label>
-          <input type="email" class="form-control" [(ngModel)]="nuevaCliente().email" name="email" />
+          <input type="email" class="form-control" [(ngModel)]="nuevaCliente.email" name="email" />
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold">Ciudad</label>
-          <input type="text" class="form-control" [(ngModel)]="nuevaCliente().ciudad" name="ciudad" />
+          <input type="text" class="form-control" [(ngModel)]="nuevaCliente.ciudad" name="ciudad" />
         </div>
         <div class="col-12">
           <label class="form-label fw-semibold">Dirección</label>
-          <input type="text" class="form-control" [(ngModel)]="nuevaCliente().direccion" name="direccion" />
+          <input type="text" class="form-control" [(ngModel)]="nuevaCliente.direccion" name="direccion" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Zona</label>
+          <select class="form-select" [(ngModel)]="nuevaCliente.zonaID" name="zonaID" required>
+            <option [ngValue]="null">Seleccione una zona</option>
+            <option *ngFor="let z of zonas" [ngValue]="z.zonaID">{{ z.nombre }}</option>
+          </select>
         </div>
       </div>
+
       <div class="text-end mt-4">
         <button class="btn btn-success rounded-pill px-4" type="submit">
           <i class="bi bi-check-circle me-1"></i> Guardar Cliente
@@ -44,24 +54,77 @@
     </form>
   </div>
 
+  <!-- FORMULARIO EDITAR CLIENTE -->
+  <div *ngIf="mostrarEditarFormulario" class="card border-0 shadow-lg p-4 mb-4">
+    <h5 class="text-primary mb-3">Editar Cliente</h5>
+
+    <form (ngSubmit)="guardarEdicion()">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="clienteEditando.nombre" name="editNombre" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Teléfono</label>
+          <input type="text" class="form-control" [(ngModel)]="clienteEditando.telefono" name="editTelefono" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="clienteEditando.email" name="editEmail" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Ciudad</label>
+          <input type="text" class="form-control" [(ngModel)]="clienteEditando.ciudad" name="editCiudad" />
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">Dirección</label>
+          <input type="text" class="form-control" [(ngModel)]="clienteEditando.direccion" name="editDireccion" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Zona</label>
+          <select class="form-select" [(ngModel)]="clienteEditando.zonaID" name="editZonaID" required>
+            <option [ngValue]="null">Seleccione una zona</option>
+            <option *ngFor="let z of zonas" [ngValue]="z.zonaID">{{ z.nombre }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="text-end mt-4">
+        <button class="btn btn-primary rounded-pill px-4 me-2" type="submit">
+          <i class="bi bi-pencil-square me-1"></i> Actualizar Cliente
+        </button>
+        <button class="btn btn-outline-secondary rounded-pill px-4" type="button" (click)="cerrarEditarFormulario()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
   <!-- Cargando -->
-  <div *ngIf="loading()" class="text-center my-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary"></div>
   </div>
 
   <!-- Lista de clientes -->
   <div class="row g-4">
-    <div *ngFor="let c of clientes()" class="col-12 col-md-6 col-lg-4">
+    <div *ngFor="let c of clientes" class="col-12 col-md-6 col-lg-4">
       <div class="card border-0 shadow-sm h-100">
         <div class="card-body">
           <h5 class="card-title text-primary fw-bold">{{ c.nombre }}</h5>
-          <p class="card-text mb-1"><i class="bi bi-telephone"></i> {{ c.telefono }}</p>
-          <p class="card-text mb-1" *ngIf="c.email"><i class="bi bi-envelope"></i> {{ c.email }}</p>
-          <p class="card-text mb-1" *ngIf="c.ciudad"><i class="bi bi-geo-alt"></i> {{ c.ciudad }}</p>
-          <p class="card-text mb-3" *ngIf="c.zonaNombre"><i class="bi bi-pin-map"></i> {{ c.zonaNombre }}</p>
-          <button class="btn btn-outline-danger btn-sm rounded-pill" (click)="eliminarCliente(c.clienteID)">
+          <p class="mb-1"><i class="bi bi-telephone"></i> {{ c.telefono }}</p>
+          <p class="mb-1" *ngIf="c.email"><i class="bi bi-envelope"></i> {{ c.email }}</p>
+          <p class="mb-1" *ngIf="c.ciudad"><i class="bi bi-geo-alt"></i> {{ c.ciudad }}</p>
+          <p class="mb-3" *ngIf="c.zonaNombre"><i class="bi bi-pin-map"></i> {{ c.zonaNombre }}</p>
+
+          <button
+            class="btn btn-outline-primary btn-sm rounded-pill me-2"
+            (click)="abrirEditarCliente(c)">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+
+          <button
+            class="btn btn-outline-danger btn-sm rounded-pill"
+            (click)="eliminarCliente(c.clienteID)">
             <i class="bi bi-trash"></i> Eliminar
           </button>
         </div>
@@ -69,8 +132,8 @@
     </div>
   </div>
 
-  <!-- Sin clientes -->
-  <div *ngIf="!loading() && clientes().length === 0" class="alert alert-warning text-center mt-4">
+  <div *ngIf="!loading && clientes.length === 0"
+       class="alert alert-warning text-center mt-4">
     <i class="bi bi-exclamation-circle"></i> No hay clientes registrados.
   </div>
 </div>

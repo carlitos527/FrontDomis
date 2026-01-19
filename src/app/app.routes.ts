@@ -10,12 +10,14 @@ import { ProductosListComponent } from './components/productos-list.component'; 
 import { ZonasComponent } from './components/zona.component';
 import { HomeComponent } from './components/home.component';
 import { AuthComponent } from './components/AuthComponent'; 
+import { UsuariosGestionComponent } from './components/usuarios-gestion.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
 
   { path: 'empresa', component: EmpresaComponent },
-  { path: 'usuarios', component: AuthComponent }, // ruta para tu formulario de usuarios
+  { path: 'usuarios', component: AuthComponent }, // login
+  { path: 'usuarios/gestion', component: UsuariosGestionComponent, canActivate: [AuthGuard] },
 
    { path: 'home', component: HomeComponent, canActivate: [AuthGuard]  },
 

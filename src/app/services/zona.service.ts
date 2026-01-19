@@ -29,6 +29,7 @@ export class ZonaService {
   }
 
   getAll(): Observable<Zona[]> {
+    
     return this.http.get<Zona[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
@@ -36,9 +37,20 @@ export class ZonaService {
     return this.http.get<Zona>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  create(zona: Zona): Observable<Zona> {
-    return this.http.post<Zona>(this.apiUrl, zona, { headers: this.getHeaders() });
-  }
+ create(zona: Zona): Observable<Zona> {
+
+  const username = localStorage.getItem('username') || 'admin';
+
+  const payload: Zona = {
+    ...zona,
+    createdBy: username
+  };
+
+  return this.http.post<Zona>(this.apiUrl, payload, {
+    headers: this.getHeaders()
+  });
+}
+
 
   update(id: number, zona: Zona): Observable<Zona> {
     return this.http.put<Zona>(`${this.apiUrl}/${id}`, zona, { headers: this.getHeaders() });

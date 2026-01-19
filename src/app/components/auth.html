@@ -1,36 +1,84 @@
 <div class="auth-container" *ngIf="!isLoggedIn()">
+  <!-- Título dinámico -->
   <h2 *ngIf="mode() === 'login'">Iniciar Sesión</h2>
   <h2 *ngIf="mode() === 'register'">Registrar Usuario</h2>
 
-  <input [ngModel]="nombreUsuario()" (ngModelChange)="nombreUsuario.set($event)" placeholder="Usuario" />
-<input [ngModel]="password()" (ngModelChange)="password.set($event)" type="password" placeholder="Contraseña" />
+  <!-- Campo usuario -->
+  <input
+    [ngModel]="nombreUsuario()"
+    (ngModelChange)="nombreUsuario.set($event)"
+    placeholder="Usuario"
+    class="form-control mb-2"
+  />
 
+  <!-- Campo contraseña -->
+  <input
+    [ngModel]="password()"
+    (ngModelChange)="password.set($event)"
+    type="password"
+    placeholder="Contraseña"
+    class="form-control mb-2"
+  />
 
-  <button *ngIf="mode() === 'login'" (click)="login()" [disabled]="loading()">
+  <!-- ✅ Selector de Rol (solo cuando se está registrando) -->
+  <div *ngIf="mode() === 'register'" class="mb-3">
+    <label class="form-label">Rol</label>
+    <select
+      [ngModel]="rol()"
+      (ngModelChange)="rol.set($event)"
+      class="form-select"
+      required
+    >
+      <option value="">Seleccionar rol</option>
+      <option value="Admin">Administrador</option>
+      <option value="Clientes">Cliente</option>
+      <option value="Domiciliario">Domiciliario</option>
+    </select>
+  </div>
+
+  <!-- Botones -->
+  <button
+    *ngIf="mode() === 'login'"
+    (click)="login()"
+    [disabled]="loading()"
+    class="btn btn-primary w-100 mb-2"
+  >
     {{ loading() ? 'Ingresando...' : 'Ingresar' }}
   </button>
 
-  <button *ngIf="mode() === 'register'" (click)="register()" [disabled]="loading()">
+  <button
+    *ngIf="mode() === 'register'"
+    (click)="register()"
+    [disabled]="loading()"
+    class="btn btn-success w-100 mb-2"
+  >
     {{ loading() ? 'Registrando...' : 'Registrar' }}
   </button>
 
+  <!-- Mensajes -->
   <p class="text-danger" *ngIf="error()">{{ error() }}</p>
   <p class="text-success" *ngIf="success()">{{ success() }}</p>
 
-  <p class="toggle-text">
+  <!-- Cambiar modo -->
+  <p class="toggle-text mt-3 text-center">
     <ng-container *ngIf="mode() === 'login'">
       ¿No tienes cuenta?
-      <a (click)="toggleMode()">Regístrate</a>
+      <a (click)="toggleMode()" class="text-primary">Regístrate</a>
     </ng-container>
     <ng-container *ngIf="mode() === 'register'">
       ¿Ya tienes cuenta?
-      <a (click)="toggleMode()">Inicia sesión</a>
+      <a (click)="toggleMode()" class="text-primary">Inicia sesión</a>
     </ng-container>
   </p>
 </div>
 
-<!-- ✅ Mensaje de transición -->
-<div *ngIf="isLoggedIn()">
-  <h3>{{ success() }}</h3>
+<!-- ✅ Mensaje de transición al loguearse -->
+<!-- ✅ Mensaje de transición al loguearse -->
+<div *ngIf="isLoggedIn()" class="text-center mt-4">
+  <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+  <h3 class="mt-3">{{ success() }}</h3>
   <p>Redirigiendo al inicio...</p>
 </div>
+

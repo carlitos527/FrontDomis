@@ -44,5 +44,21 @@ logout(): void {
   localStorage.removeItem('token');
 }
 
+getPerfil(): Observable<UsuarioResponseDTO> {
+  const token = localStorage.getItem('token');
+  const headers = { Authorization: `Bearer ${token}` };
+  return this.http.get<UsuarioResponseDTO>(`${this.baseUrl}/perfil`, { headers });
+}
+
+guardarUsuarioLocal(usuario: UsuarioResponseDTO) {
+  localStorage.setItem('token', usuario.token);
+  localStorage.setItem('usuario', JSON.stringify(usuario));
+}
+
+obtenerUsuarioLocal(): UsuarioResponseDTO | null {
+  const data = localStorage.getItem('usuario');
+  return data ? JSON.parse(data) : null;
+}
+
 
 }

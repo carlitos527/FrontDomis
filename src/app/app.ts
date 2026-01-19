@@ -1,13 +1,19 @@
+
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 
 @Component({
+  
   selector: 'app-root',
   standalone: true, // Hacemos que sea standalone
-  imports: [RouterModule], // Importamos RouterModule para <router-outlet>
+  imports: [RouterModule,  CommonModule, FormsModule ], // Importamos RouterModule para <router-outlet>
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
+
 export class AppComponent {
   protected readonly title = signal('Frontdomis');
 
@@ -44,7 +50,7 @@ export class AppComponent {
 
 
    goTousuarios() {
-    this.router.navigate(['/usuarios']);
+    this.router.navigate(['/usuarios/gestion']);
   }
 
   goToZonas() {

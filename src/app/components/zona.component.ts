@@ -15,6 +15,9 @@ import { ZonaService, Zona } from '../services/zona.service';
 export class ZonasComponent implements OnInit {
   zonas: Zona[] = [];
   loading = true;
+  mensajeExito = '';
+  
+  mensajeError = '';
    mostrarFormulario = false;
   nuevaZona: Zona = { nombre: '', tarifaEnvio: 0 };
 
@@ -41,21 +44,40 @@ export class ZonasComponent implements OnInit {
   crearZona() {
     this.zonaService.create(this.nuevaZona).subscribe({
       next: () => {
+
+        this.mensajeExito = 'Zona creada correctamente ✅';
+        this.mensajeError = '';
         this.nuevaZona = { nombre: '', tarifaEnvio: 0 };
         this.mostrarFormulario = false;
         this.cargarZonas();
+
+        // Ocultar mensaje luego de 3 segundos
+      setTimeout(() => {
+        this.mensajeExito = '';
+      }, 3000);
       },
-      error: err => console.error('Error al crear zona', err)
-    });
+       error: err => {
+      console.error('Error al crear zona', err);
+      this.mensajeError = 'Error al crear la zona ❌';
+      this.mensajeExito = '';
+    }
+  });
   }
 
-  eliminarZona(id?: number) {
-    if (!id) return;
-    if (confirm('¿Eliminar esta zona?')) {
-      this.zonaService.delete(id).subscribe({
-        next: () => this.cargarZonas(),
-        error: err => console.error('Error al eliminar zona', err)
-      });
+ 
+ eliminarZona(id?: number) {
+  if (!id) return;
+
+  this.zonaService.delete(id).subscribe({
+    next: () => {
+       this.mensajeExito = 'La zona se eliminó correctamente';
+      this.cargarZonas();
+    },
+    error: err => {
+      console.error('Error al eliminar zona', err);
+      alert('Ocurrió un error al eliminar la zona');
     }
-  }
+  });
+}
+
 }

@@ -17,6 +17,18 @@
   {
     <div class="card border-0 shadow-lg p-4 mb-4">
       <h5 class="text-primary mb-3">Registrar Nueva Zona</h5>
+      <!-- MENSAJES -->
+  <div *ngIf="mensajeExito" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ mensajeExito }}
+    <button type="button" class="btn-close" (click)="mensajeExito=''" aria-label="Close"></button>
+  </div>
+
+  <div *ngIf="mensajeError" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ mensajeError }}
+    <button type="button" class="btn-close" (click)="mensajeError=''" aria-label="Close"></button>
+  </div>
+
+  <!-- FORMULARIO -->
       <form (ngSubmit)="crearZona()">
         <div class="row g-3">
           <div class="col-md-6">
